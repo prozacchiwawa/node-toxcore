@@ -2,14 +2,24 @@
   "name": "toxcore",
   "version": "1.3.0",
   "description": "Node bindings for libtoxcore",
-  "keywords": ["im", "libtoxcore", "node-toxcore", "skype", "tox", "toxcore"],
+  "keywords": [
+    "im",
+    "libtoxcore",
+    "node-toxcore",
+    "skype",
+    "tox",
+    "toxcore"
+  ],
   "license": "GPL-3.0",
   "author": {
     "name": "saneki",
     "email": "s@neki.me"
   },
   "main": "./lib/main.js",
-  "files": ["lib", "typings"],
+  "files": [
+    "lib",
+    "typings"
+  ],
   "directories": {
     "lib": "./lib"
   },
@@ -24,8 +34,8 @@
     "buffertools": "2",
     "ffi": "2",
     "ref": "^1.2",
-    "ref-struct": "1",
     "ref-array": "1",
+    "ref-struct": "^1.1.0",
     "underscore": "1"
   },
   "devDependencies": {
