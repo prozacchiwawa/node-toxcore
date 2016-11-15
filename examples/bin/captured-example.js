@@ -21,6 +21,7 @@
  */
 var testingMode=false;
 
+var net = require('net');
 var path = require('path');
 var toxcore = !testingMode ? require('toxcore') : require(path.join(__dirname, '..', '..', 'lib', 'main'));
 var tox = new toxcore.Tox();
@@ -44,8 +45,12 @@ var tox = new toxcore.Tox();
     key: '04119E835DF3E78BACF0F84235B300546AF8B936F035185E2A8E9E0A67C8924F' }
 ];
 
+var sock = null;
 tox.on('send', function(pkt) {
   console.log(pkt);
+});
+
+tox.on('socket', function(s) {
 });
 
 // Bootstrap from nodes
