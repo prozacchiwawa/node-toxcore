@@ -21,10 +21,26 @@
  */
 var testingMode=false;
 
-var net = require('net');
+var dgram = require('dgram');
 var path = require('path');
 var toxcore = !testingMode ? require('toxcore') : require(path.join(__dirname, '..', '..', 'lib', 'main'));
-var tox = new toxcore.Tox();
+
+var tox = null;
+var tox_sock = { };
+var makesocket = function(s) {
+  console.log('create-socket',s);
+  var so = dgram.createSocket(s.af == 2 ? 'udp4' : 'udp6');
+  console.log('so',so);
+  so.bind(s.port);
+  so.on('message', function(msg,rinfo) {
+    console.log('received',rinfo);
+    tox.receivedPacket(msg,rinfo);
+  });
+  tox_sock[s.sock] = so;
+  return so;
+};
+
+tox = new toxcore.Tox({makesocket: makesocket});
 
 /**
  * Bootstrap tox via hardcoded nodes.
@@ -45,12 +61,18 @@ var tox = new toxcore.Tox();
     key: '04119E835DF3E78BACF0F84235B300546AF8B936F035185E2A8E9E0A67C8924F' }
 ];
 
-var sock = null;
 tox.on('send', function(pkt) {
-  console.log(pkt);
-});
-
-tox.on('socket', function(s) {
+  console.log('sock',pkt.sock, 'ip_port', pkt.ip_port, 'length', pkt.length);
+  var family = pkt.ip_port[0];
+  var addr = [pkt.ip_port[8],pkt.ip_port[9],pkt.ip_port[10],pkt.ip_port[11]].join('.');
+  var port = (pkt.ip_port[24] * 256) + pkt.ip_port[25];
+  var raddr = { address: addr, port: port };
+  console.log('to',raddr,'pkt.length',pkt.length);
+  try {
+    tox_sock[pkt.sock].send(pkt.data, 0, pkt.length, port, addr);
+  } catch(e) {
+    console.log('error sending',e);
+  }
 });
 
 // Bootstrap from nodes
