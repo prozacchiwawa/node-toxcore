@@ -28,10 +28,8 @@ var toxcore = !testingMode ? require('toxcore') : require(path.join(__dirname, '
 var tox = null;
 var tox_sock = { };
 var makesocket = function(s) {
-  console.log('create-socket',s);
   var so = dgram.createSocket(s.af == 2 ? 'udp4' : 'udp6');
-  console.log('so',so);
-  so.bind(s.port);
+  so.bind(s.port, '0.0.0.0');
   so.on('message', function(msg,rinfo) {
     console.log('received',rinfo);
     tox.receivedPacket(msg,rinfo);
