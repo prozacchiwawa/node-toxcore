@@ -46,18 +46,14 @@ tox = new toxcore.Tox({makesocket: makesocket, 'ipv6': true});
  * For more nodes, see: https://wiki.tox.chat/users/nodes
  */
  var nodes = [
-  { maintainer: 'saneki',
-    address: '96.31.85.154',
-    port: 33445,
-    key: '674153CF49616CD1C4ADF44B004686FC1F6C9DCDD048EF89B117B3F02AA0B778' },
-  { maintainer: 'Impyy',
-    address: '178.62.250.138',
-    port: 33445,
-    key: '788236D34978D1D5BD822F0A5BEBD2C53C64CC31CD3149350EE27D4D9A2F9B6B' },
   { maintainer: 'sonOfRa',
     address: '144.76.60.215',
     port: 33445,
-    key: '04119E835DF3E78BACF0F84235B300546AF8B936F035185E2A8E9E0A67C8924F' }
+    key: '04119E835DF3E78BACF0F84235B300546AF8B936F035185E2A8E9E0A67C8924F' },
+  { maintainer: 'me',
+    address: '50.116.2.208',
+    port: 33445,
+    key: 'A62A2DD01CDC7B5CC4A42C2189BB56818552A4CA258420536C6075A8AAB55019' }
 ];
 
 tox.on('send', function(pkt) {
