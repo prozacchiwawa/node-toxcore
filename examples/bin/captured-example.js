@@ -32,7 +32,6 @@ var makesocket = function(s) {
   var so = dgram.createSocket('udp4');
   so.bind(s.port, '0.0.0.0');
   so.on('message', function(msg,rinfo) {
-    console.log('received',rinfo);
     tox.receivedPacket(msg,rinfo);
   });
   tox_sock[s.sock] = so;
@@ -61,7 +60,6 @@ tox = new toxcore.Tox({makesocket: makesocket, ipv6: true});
 ];
 
 tox.on('send', function(pkt) {
-  console.log('sock',pkt.sock, 'ip_port', pkt.ip_port, 'length', pkt.length);
   var family = pkt.ip_port[0];
   var addr;
   var port = (pkt.ip_port[24] * 256) + pkt.ip_port[25];
@@ -79,7 +77,10 @@ tox.on('send', function(pkt) {
     addr = ipaddr.fromByteArray(addrArr).toString();
   }
   var raddr = { address: addr, port: port };
-  console.log('to',raddr,'pkt.length',pkt.length);
+  if (port == 0) {
+    console.error('0 port in', raddr);
+    return;
+  }
   try {
     tox_sock[pkt.sock].send(pkt.data, 0, pkt.length, port, addr);
   } catch(e) {
